@@ -1,0 +1,29 @@
+parameters:
+    level: max
+    paths:
+        - src
+    ignoreErrors:
+        -
+            message: "#^Cannot call method getAlias\\(\\) on mixed\\.$#"
+            count: 19
+            path: src/InstallManager.php
+        -
+            message: "#^Method Pyncer\\\\Snyppet\\\\InstallManager::getInstall\\(\\) should return Pyncer\\\\Snyppet\\\\InstallInterface|null but returns object\\.$#"
+            count: 1
+            path: src/InstallManager.php
+        -
+            message: "#^Call to an undefined method object::getVersion\\(\\)\\.$#"
+            count: 2
+            path: src/InstallManager.php
+        -
+            message: "#^Method Pyncer\\\\Snyppet\\\\InstallManager::getUpgrades\\(\\) should return array<Pyncer\\\\Snyppet\\\\UpgradeInterface> but returns array<int, object>\\.$#"
+            count: 1
+            path: src/InstallManager.php
+        -
+            message: "#^Method Pyncer\\\\Snyppet\\\\Snyppet::getComposer\\(\\) should return array{name: string|null, description: string|null, version: string|null, autoload: array{psr-4: array<string, array<string>|string>|null}|null, extra: array{snyppet: array{name: string|null, description: string|null, namespace: string|null, version: string|null}|null}|null} but returns array<string, mixed>\\.$#"
+            count: 2
+            path: src/Snyppet.php
+        -
+            message: "#^Property Pyncer\\\\Snyppet\\\\Snyppet::\\$composer \\(array<string, mixed>|null\\) does not accept mixed\\.$#"
+            count: 1
+            path: src/Snyppet.php
