@@ -3,13 +3,17 @@ namespace Pyncer\Snyppet;
 
 use Pyncer\Database\ConnectionInterface;
 use Pyncer\Snyppet\InstallInterface;
+use Pyncer\Snyppet\SnyppetManager;
 
 abstract class AbstractInstall implements InstallInterface
 {
     public function __construct(
-        protected ConnectionInterface $connection
+        protected ConnectionInterface $connection,
     ) {}
 
+    /**
+     * @inheritdoc
+     */
     public function install(): bool
     {
         $this->connection->start();
@@ -30,6 +34,9 @@ abstract class AbstractInstall implements InstallInterface
         return true;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function uninstall(): bool
     {
         $this->connection->start();
@@ -50,11 +57,17 @@ abstract class AbstractInstall implements InstallInterface
         return true;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function hasRelated(string $snyppetAlias): bool
     {
         return false;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function installRelated(string $snyppetAlias): bool
     {
         $this->connection->start();
@@ -75,6 +88,9 @@ abstract class AbstractInstall implements InstallInterface
         return true;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function uninstallRelated(string $snyppetAlias): bool
     {
         $this->connection->start();
@@ -95,6 +111,9 @@ abstract class AbstractInstall implements InstallInterface
         return true;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function upgradeRelated(
         string $snyppetAlias,
         string $version
@@ -121,6 +140,9 @@ abstract class AbstractInstall implements InstallInterface
         return true;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function downgradeRelated(
         string $snyppetAlias,
         string $version
@@ -145,6 +167,14 @@ abstract class AbstractInstall implements InstallInterface
         }
 
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRequired(): array
+    {
+        return [];
     }
 
     protected abstract function safeInstall(): bool;

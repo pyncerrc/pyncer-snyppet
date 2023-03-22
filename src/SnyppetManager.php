@@ -54,6 +54,34 @@ class SnyppetManager extends StaticAccessIterator
         static::$values[$snyppet->getAlias()] = $snyppet;
     }
 
+    /**
+     * @return array<string> An array of snyppets.
+     */
+    public function getSnyppets(): array
+    {
+        $snyppets = [];
+
+        foreach ($this as $snyppet) {
+            $snyppets[] = $snyppet;
+        }
+
+        return $snyppets;
+    }
+
+    /**
+     * @return array<string> An array of snyppet aliases.
+     */
+    public function getAliases(): array
+    {
+        $aliases = [];
+
+        foreach ($this as $snyppet) {
+            $aliases[] = $snyppet->getAlias();
+        }
+
+        return $aliases;
+    }
+
     public function get(string $alias): SnyppetInterface
     {
         if ($this->snyppets !== null &&

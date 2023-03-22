@@ -46,28 +46,37 @@ class InstallManager
 
         $install = $this->getInstall($snyppetAlias);
 
-        if ($install !== null && !$install->install()) {
-            return false;
+        if ($install !== null) {
+            if (!$this->installRequired($install->getRequired())) {
+                return false;
+            }
+
+            if (!$install->install()) {
+                return false;
+            }
         }
 
         $this->insertInstall($snyppetAlias);
+
+        $this->installed[$snyppetAlias] = true;
 
         if ($snyppetAlias === 'install') {
             return true;
         }
 
-        $this->installed[$snyppetAlias] = true;
-
-        foreach ($this->snyppetManager as $relatedSnyppet) {
-            if ($relatedSnyppet->getAlias() === $snyppetAlias) {
+        foreach ($this->snyppetManager->getAliases() as $relatedSnyppetAlias) {
+            // Skip over current snyppet
+            if ($relatedSnyppetAlias === $snyppetAlias) {
                 continue;
             }
 
-            if (!$this->isInstalled($relatedSnyppet->getAlias())) {
+            // Skip over snyppets that aren't installed
+            if (!$this->isInstalled($relatedSnyppetAlias)) {
                 continue;
             }
 
-            $relatedInstall = $this->getInstall($relatedSnyppet->getAlias());
+            // Skip over snyppets that don't have an install
+            $relatedInstall = $this->getInstall($relatedSnyppetAlias);
             if ($relatedInstall === null) {
                 continue;
             }
@@ -126,16 +135,16 @@ class InstallManager
 
         $this->installed[$snyppetAlias] = false;
 
-        foreach ($this->snyppetManager as $relatedSnyppet) {
-            if ($relatedSnyppet->getAlias() === $snyppetAlias) {
+        foreach ($this->snyppetManager->getAliases() as $relatedSnyppetAlias) {
+            if ($relatedSnyppetAlias === $snyppetAlias) {
                 continue;
             }
 
-            if (!$this->isInstalled($relatedSnyppet->getAlias())) {
+            if (!$this->isInstalled($relatedSnyppetAlias)) {
                 continue;
             }
 
-            $relatedInstall = $this->getInstall($relatedSnyppet->getAlias());
+            $relatedInstall = $this->getInstall($relatedSnyppetAlias);
             if ($relatedInstall === null) {
                 continue;
             }
@@ -162,23 +171,51 @@ class InstallManager
     {
         $success = true;
 
-        foreach ($this->snyppetManager as $snyppet) {
+        foreach ($this->snyppetManager->getAliases() as $snyppetAlias) {
             if ($snyppets !== null &&
-                !in_array($snyppet->getAlias(), $snyppets)
+                !in_array($snyppetAlias, $snyppets)
             ) {
                 continue;
             }
 
-            if ($this->isInstalled($snyppet->getAlias())) {
+            if ($this->isInstalled($snyppetAlias)) {
                 continue;
             }
 
-            if (!$this->install($snyppet->getAlias())) {
+            if (!$this->install($snyppetAlias)) {
                 $success = false;
             }
         }
 
         return $success;
+    }
+
+    /**
+     * Installs the specified requried snyppets.
+     *
+     * This differs from installAll in that it doesn't ignore snyppets that are
+     * not available.
+     *
+     * @param array<string, string> $requiredSnyppets An array of required snyppets.
+     * @return bool True on success, otherwise false.
+     */
+    protected function installRequired(array $requiredSnyppets): bool
+    {
+        foreach ($requiredSnyppets as $alias => $version) {
+            if (!$this->snyppetManager->has($alias)) {
+                return false;
+            }
+
+            if ($this->isInstalled($alias)) {
+                continue;
+            }
+
+            if (!$this->install($alias)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -208,7 +245,9 @@ class InstallManager
             }
 
             // Only upgrade to specified version
-            if ($version !== null && $upgrade->getVersion() > $version) {
+            if ($version !== null &&
+                version_compare($upgrade->getVersion(), $version, '>')
+            ) {
                 continue;
             }
 
@@ -218,16 +257,16 @@ class InstallManager
 
             $this->insertInstall($snyppetAlias, $upgrade->getVersion());
 
-            foreach ($this->snyppetManager as $relatedSnyppet) {
-                if ($relatedSnyppet->getAlias() === $snyppetAlias) {
+            foreach ($this->snyppetManager->getAliases() as $relatedSnyppetAlias) {
+                if ($relatedSnyppetAlias === $snyppetAlias) {
                     continue;
                 }
 
-                if (!$this->isInstalled($relatedSnyppet->getAlias())) {
+                if (!$this->isInstalled($relatedSnyppetAlias)) {
                     continue;
                 }
 
-                $relatedInstall = $this->getInstall($relatedSnyppet->getAlias());
+                $relatedInstall = $this->getInstall($relatedSnyppetAlias);
                 if ($relatedInstall === null) {
                     continue;
                 }
@@ -270,20 +309,20 @@ class InstallManager
                 continue;
             }
 
-            if ($upgrade->getVersion() < $version) {
+            if (version_compare($upgrade->getVersion(), $version, '<')) {
                 break;
             }
 
-            foreach ($this->snyppetManager as $relatedSnyppet) {
-                if ($relatedSnyppet->getAlias() === $snyppetAlias) {
+            foreach ($this->snyppetManager->getAliases() as $relatedSnyppetAlias) {
+                if ($relatedSnyppetAlias === $snyppetAlias) {
                     continue;
                 }
 
-                if (!$this->isInstalled($relatedSnyppet->getAlias())) {
+                if (!$this->isInstalled($relatedSnyppetAlias)) {
                     continue;
                 }
 
-                $relatedInstall = $this->getInstall($relatedSnyppet->getAlias());
+                $relatedInstall = $this->getInstall($relatedSnyppetAlias);
                 if ($relatedInstall === null) {
                     continue;
                 }
@@ -320,18 +359,18 @@ class InstallManager
     {
         $success = true;
 
-        foreach ($this->snyppetManager as $snyppet) {
+        foreach ($this->snyppetManager->getAliases() as $snyppetAlias) {
             if ($snyppets !== null &&
-                !in_array($snyppet->getAlias(), $snyppets)
+                !in_array($snyppetAlias, $snyppets)
             ) {
                 continue;
             }
 
-            if (!$this->isInstalled($snyppet->getAlias())) {
+            if (!$this->isInstalled($snyppetAlias)) {
                 continue;
             }
 
-            if (!$this->upgrade($snyppet->getAlias())) {
+            if (!$this->upgrade($snyppetAlias)) {
                 $success = false;
             }
         }
@@ -368,8 +407,8 @@ class InstallManager
     {
         $success = true;
 
-        foreach ($this->snyppetManager as $snyppet) {
-            if (!$this->installOrUpgrade($snyppet->getAlias())) {
+        foreach ($this->snyppetManager->getAliases() as $snyppetAlias) {
+            if (!$this->installOrUpgrade($snyppetAlias)) {
                 $success = false;
             }
         }
@@ -440,7 +479,7 @@ class InstallManager
     }
 
     /**
-     * Deletes teh specified snyppet and version from the install table.
+     * Deletes the specified snyppet and version from the install table.
      *
      * If no version is specified all installs for the specified snyppet will
      * be deleted.
@@ -459,34 +498,33 @@ class InstallManager
         $installMapper = $this->mapperAdaptor->getMapper();
         $formatter = $this->mapperAdaptor->getFormatter();
 
-        if ($version === null) {
-            $data = $formatter->formatData([
-                'alias' => $snyppetAlias,
-            ]);
+        $data = $formatter->formatData([
+            'alias' => $snyppetAlias,
+        ]);
 
+        if ($version === null) {
             $affectedRows = $installMapper->deleteAllByColumns($data);
         } else {
-            $affectedRows = $installMapper->deleteAllByQuery(
-                function($query) use ($formatter, $snyppetAlias, $version) {
-                    // Alias
-                    $data = $formatter->formatData([
-                        'alias' => $snyppetAlias,
-                    ]);
+            $versionColumn = $formatter->formatData([
+                'version' => $version,
+            ]);
+            $versionColumn = array_keys($versionColumn)[0];
 
-                    $key = array_keys($data)[0];
-                    $value = array_values($data)[0];
-                    $query->getWhere()->compare($key, $value);
+            $affectedRows = 0;
 
-                    // Version
-                    $data = $formatter->formatData([
-                        'version' => $version,
-                    ]);
+            $result = $installMapper->selectAllByColumns($data);
+            foreach ($result as $row) {
+                $versionValue = $row[$versionColumn];
+                $versionValue = $formatter->unformatData([
+                    $versionColumn => $versionValue
+                ]);
+                $versionValue = array_values($versionValue)[0];
 
-                    $key = array_keys($data)[0];
-                    $value = array_values($data)[0];
-                    $query->getWhere()->compare($key, $value, '>=');
+                if (version_compare($versionValue, $version, '>=')) {
+                    ++$affectedRows;
+                    $installMapper->deleteById($row['id']);
                 }
-            );
+            }
         }
 
         return ($affectedRows > 0);
@@ -557,7 +595,7 @@ class InstallManager
         }
 
         usort($upgrades, function($a, $b) {
-            return $a->getVersion() <=> $b->getVersion();
+            return version_compare($a->getVersion(), $a->getVersion());
         });
 
         return $upgrades;

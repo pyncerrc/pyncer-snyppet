@@ -18,8 +18,8 @@ class Snyppet implements SnyppetInterface
     /**
      * @param string $alias A unique alias to represent this snyppet.
      * @param string $dir The directory this snyppet resides in.
-     * @param array<string, array<string>> $middlewares An array of names of middlewares to
-     *  run automatically when the snyppet is initialized.
+     * @param array<string, array<string>> $middlewares An array of names of
+     *  middlewares to run automatically when the snyppet is initialized.
      */
     public function __construct(
         private readonly string $alias,
@@ -27,6 +27,9 @@ class Snyppet implements SnyppetInterface
         private readonly array $middlewares = [],
     ) {}
 
+    /**
+     * @inheritdoc
+     */
     public function initialize(): void
     {
         $file = $this->getDir() . DS . 'initialize.php';
@@ -36,11 +39,17 @@ class Snyppet implements SnyppetInterface
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getAlias(): string
     {
         return $this->alias;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getDir(): string
     {
         $composer = $this->getComposer();
@@ -94,6 +103,9 @@ class Snyppet implements SnyppetInterface
         return $middlewares;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getName(): ?string
     {
         $composer = $this->getComposer();
@@ -102,6 +114,9 @@ class Snyppet implements SnyppetInterface
             $composer['name'] ?? null;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getDescription(): ?string
     {
         $composer = $this->getComposer();
@@ -111,6 +126,9 @@ class Snyppet implements SnyppetInterface
             null;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getVersion(): ?string
     {
         $composer = $this->getComposer();
@@ -131,6 +149,9 @@ class Snyppet implements SnyppetInterface
         return \Composer\InstalledVersions::getVersion($name);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getNamespace(): ?string
     {
         $composer = $this->getComposer();
@@ -149,6 +170,8 @@ class Snyppet implements SnyppetInterface
     }
 
     /**
+     * Gets the composer file data as an array.
+     *
      * @return array{
      *     name: null|string,
      *     description: null|string,
