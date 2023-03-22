@@ -55,7 +55,7 @@ class SnyppetManager extends StaticAccessIterator
     }
 
     /**
-     * @return array<string> An array of snyppets.
+     * @return array<Snyppet> An array of snyppets.
      */
     public function getSnyppets(): array
     {

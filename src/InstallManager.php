@@ -550,7 +550,7 @@ class InstallManager
 
                 if (version_compare($versionValue, $version, '>=')) {
                     ++$affectedRows;
-                    $installMapper->deleteById($row['id']);
+                    $installMapper->deleteById(intval($row['id']));
                 }
             }
         }

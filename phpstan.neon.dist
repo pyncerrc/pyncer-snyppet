@@ -4,10 +4,6 @@ parameters:
         - src
     ignoreErrors:
         -
-            message: "#^Cannot call method getAlias\\(\\) on mixed\\.$#"
-            count: 19
-            path: src/InstallManager.php
-        -
             message: "#^Method Pyncer\\\\Snyppet\\\\InstallManager::getInstall\\(\\) should return Pyncer\\\\Snyppet\\\\InstallInterface|null but returns object\\.$#"
             count: 1
             path: src/InstallManager.php
@@ -20,6 +16,14 @@ parameters:
             count: 1
             path: src/InstallManager.php
         -
+            message: "#^Cannot access offset \\(int|string\\) on mixed\\.$#"
+            count: 1
+            path: src/InstallManager.php
+        -
+            message: "#^Cannot access offset 'id' on mixed\\.$#"
+            count: 1
+            path: src/InstallManager.php
+        -
             message: "#^Method Pyncer\\\\Snyppet\\\\Snyppet::getComposer\\(\\) should return array{name: string|null, description: string|null, version: string|null, autoload: array{psr-4: array<string, array<string>|string>|null}|null, extra: array{snyppet: array{name: string|null, description: string|null, namespace: string|null, version: string|null}|null}|null} but returns array<string, mixed>\\.$#"
             count: 2
             path: src/Snyppet.php
@@ -27,3 +31,11 @@ parameters:
             message: "#^Property Pyncer\\\\Snyppet\\\\Snyppet::\\$composer \\(array<string, mixed>|null\\) does not accept mixed\\.$#"
             count: 1
             path: src/Snyppet.php
+        -
+            message: "#^Method Pyncer\\\\Snyppet\\\\SnyppetManager::getSnyppets\\(\\) should return array<Pyncer\\\\Snyppet\\\\Snyppet> but returns array<int, mixed>\\.$#"
+            count: 1
+            path: src/SnyppetManager.php
+        -
+            message: "#^Cannot call method getAlias\\(\\) on mixed\\.$#"
+            count: 1
+            path: src/SnyppetManager.php
