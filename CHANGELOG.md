@@ -11,6 +11,7 @@
 
 - Fixed issue where snyppets would be skipped if more than one was installing
   at one time.
+- Fixed related installations not being installed when related snyppet already installed.
 - Fixed version comparisons to use version\_compare function.
 
 ## 1.0.1 - 2023-03-07

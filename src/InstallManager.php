@@ -75,6 +75,13 @@ class InstallManager
                 continue;
             }
 
+            // Install related snyppets of already installed snyppets
+            if ($install !== null) {
+                if ($install->hasRelated($relatedSnyppetAlias)) {
+                    $install->installRelated($relatedSnyppetAlias);
+                }
+            }
+
             // Skip over snyppets that don't have an install
             $relatedInstall = $this->getInstall($relatedSnyppetAlias);
             if ($relatedInstall === null) {
@@ -142,6 +149,13 @@ class InstallManager
 
             if (!$this->isInstalled($relatedSnyppetAlias)) {
                 continue;
+            }
+
+            // Uninstall related snyppets of already installed snyppets
+            if ($install !== null) {
+                if ($install->hasRelated($relatedSnyppetAlias)) {
+                    $install->uninstallRelated($relatedSnyppetAlias);
+                }
             }
 
             $relatedInstall = $this->getInstall($relatedSnyppetAlias);
@@ -266,6 +280,13 @@ class InstallManager
                     continue;
                 }
 
+                if ($upgrade->hasRelated($relatedSnyppetAlias)) {
+                    $upgrade->upgradeRelated(
+                        $relatedSnyppetAlias,
+                        $upgrade->getVersion()
+                    );
+                }
+
                 $relatedInstall = $this->getInstall($relatedSnyppetAlias);
                 if ($relatedInstall === null) {
                     continue;
@@ -320,6 +341,13 @@ class InstallManager
 
                 if (!$this->isInstalled($relatedSnyppetAlias)) {
                     continue;
+                }
+
+                if ($upgrade->hasRelated($relatedSnyppetAlias)) {
+                    $upgrade->downgradeRelated(
+                        $relatedSnyppetAlias,
+                        $upgrade->getVersion()
+                    );
                 }
 
                 $relatedInstall = $this->getInstall($relatedSnyppetAlias);
