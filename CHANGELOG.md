@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.1.1 - 2023-04-11
+
+### Changed
+
+- Made it so 'app' snyppet is always first when iterating.
+
 ## 1.1.0 - 2023-03-22
 
 ### Added

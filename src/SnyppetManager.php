@@ -52,6 +52,25 @@ class SnyppetManager extends StaticAccessIterator
     public static function register(Snyppet $snyppet): void
     {
         static::$values[$snyppet->getAlias()] = $snyppet;
+
+        // Ensure app is snyppet is always first
+        if ($snyppet->getAlias() === 'app') {
+            uksort(static::$values, function($a, $b) {
+                if ($a === $b) {
+                    return 0;
+                }
+
+                if ($a === 'app') {
+                    return -1;
+                }
+
+                if ($b === 'app') {
+                    return 1;
+                }
+
+                return $a <=> $b;
+            });
+        }
     }
 
     /**
