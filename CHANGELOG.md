@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.2.0 - 2023-10-19
+
+### Added
+
+- Added required snyppet option to specify snyppet middlewares should run first.
+- Added version parameter to SnyppetManager has function to ensure minimum versions.
+
 ## 1.1.1 - 2023-04-11
 
 ### Changed
@@ -10,13 +17,11 @@
 
 ### Added
 
-- Required snyppet option to specify what snyppets need to be installed before
-  the current snyppet can be installed.
+- Added required snyppet option to specify what snyppets need to be installed before the current snyppet can be installed.
 
 ### Fixed
 
-- Fixed issue where snyppets would be skipped if more than one was installing
-  at one time.
+- Fixed issue where snyppets would be skipped if more than one was installing at one time.
 - Fixed related installations not being installed when related snyppet already installed.
 - Fixed version comparisons to use version\_compare function.
 
@@ -24,8 +29,7 @@
 
 ### Changed
 
-- Added snyppets parameter to SnyppetManager constructor to optionally limit
-  what snyppets should be used.
+- Added snyppets parameter to SnyppetManager constructor to optionally limit what snyppets should be used.
 
 ## 1.0.0 - 2023-03-07
 

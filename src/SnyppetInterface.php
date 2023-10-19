@@ -17,4 +17,5 @@ interface SnyppetInterface
     public function getDescription(): ?string;
     public function getVersion(): ?string;
     public function getNamespace(): ?string;
+    public function getRequired(): array;
 }

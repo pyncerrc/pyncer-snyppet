@@ -216,7 +216,7 @@ class InstallManager
     protected function installRequired(array $requiredSnyppets): bool
     {
         foreach ($requiredSnyppets as $alias => $version) {
-            if (!$this->snyppetManager->has($alias)) {
+            if (!$this->snyppetManager->has($alias, $version)) {
                 return false;
             }
 

@@ -55,20 +55,29 @@ class SnyppetManager extends StaticAccessIterator
 
         // Ensure app is snyppet is always first
         if ($snyppet->getAlias() === 'app') {
-            uksort(static::$values, function($a, $b) {
-                if ($a === $b) {
+            usort(static::$values, function($a, $b) {
+                if ($a->getAlias() === $b->getAlias()) {
                     return 0;
                 }
 
-                if ($a === 'app') {
+                if ($a->getAlias() === 'app') {
                     return -1;
                 }
 
-                if ($b === 'app') {
+                if ($b->getAlias() === 'app') {
                     return 1;
                 }
 
-                return $a <=> $b;
+                // Sort so required goes first
+                if (in_array($a->getAlias(), $b->getRequired())) {
+                    if (!in_array($b->getAlias(), $a->getRequired())) {
+                        return -1;
+                    }
+                } elseif (in_array($b->getAlias(), $a->getRequired())) {
+                    return 1;
+                }
+
+                return $a->getAlias() <=> $b->getAlias();
             });
         }
     }
@@ -116,7 +125,7 @@ class SnyppetManager extends StaticAccessIterator
         return static::$values[$alias];
     }
 
-    public function has(string $alias): bool
+    public function has(string $alias, ?string $version = null): bool
     {
         if ($this->snyppets !== null &&
             !in_array($alias, $this->snyppets)
@@ -124,6 +133,18 @@ class SnyppetManager extends StaticAccessIterator
             return false;
         }
 
-        return array_key_exists($alias, static::$values);
+        if (!array_key_exists($alias, static::$values)) {
+            return false;
+        }
+
+        if ($version !== null && $version !== '*') {
+            $versionValue = static::$values[$alias]->getVersion();
+
+            if (version_compare($versionValue , $version, '<')) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

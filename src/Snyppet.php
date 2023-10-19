@@ -25,6 +25,7 @@ class Snyppet implements SnyppetInterface
         private readonly string $alias,
         private readonly string $dir,
         private readonly array $middlewares = [],
+        private readonly array $required = [],
     ) {}
 
     /**
@@ -211,5 +212,10 @@ class Snyppet implements SnyppetInterface
         }
 
         return $this->composer;
+    }
+
+    public function getRequired(): array
+    {
+        return $this->required;
     }
 }
