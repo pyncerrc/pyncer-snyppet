@@ -55,7 +55,7 @@ class SnyppetManager extends StaticAccessIterator
 
         // Ensure app is snyppet is always first
         if ($snyppet->getAlias() === 'app') {
-            usort(static::$values, function($a, $b) {
+            uasort(static::$values, function($a, $b) {
                 if ($a->getAlias() === $b->getAlias()) {
                     return 0;
                 }
