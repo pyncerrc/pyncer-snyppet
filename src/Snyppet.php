@@ -1,7 +1,9 @@
 <?php
 namespace Pyncer\Snyppet;
 
+use Psr\Http\Server\MiddlewareInterface as PsrMiddlewareInterface;
 use Pyncer\Exception\UnexpectedValueException;
+use Pyncer\Http\Server\MiddlewareInterface;
 use Pyncer\Snyppet\SnyppetInterface;
 
 use const DIRECTORY_SEPARATOR as DS;
@@ -11,7 +13,23 @@ use function Pyncer\IO\clean_path as pyncer_io_clean_path;
 class Snyppet implements SnyppetInterface
 {
     /**
-     * @var array<string, mixed>
+     * @var null|array{
+     *     name?: string,
+     *     description?: string,
+     *     version?: string,
+     *     autoload?: array{
+     *         psr-4?: array<string, string|array<string>>,
+     *     },
+     *     extra?: array{
+     *         snyppet?: array{
+     *              name?: string,
+     *              description?: string,
+     *              path?: string,
+     *              namespace?: string,
+     *              version?: string,
+     *         },
+     *     },
+     * }
      */
     private ?array $composer = null;
 
@@ -20,6 +38,7 @@ class Snyppet implements SnyppetInterface
      * @param string $dir The directory this snyppet resides in.
      * @param array<string, array<string>> $middlewares An array of names of
      *  middlewares to run automatically when the snyppet is initialized.
+     * @param array<string> $required An array of required snyppet aliases.
      */
     public function __construct(
         private readonly string $alias,
@@ -94,14 +113,25 @@ class Snyppet implements SnyppetInterface
         foreach ($typeMiddlewares as $middleware) {
             $class = $namespace . $middleware . 'Middleware';
 
-            if (!class_exists($class, true)) {
-                throw new UnexpectedValueException('Middleware not found. (' . $class . ')');
-            }
-
-            $middlewares[] = new $class();
+            $middlewares[] = $this->initializeMiddleware($class);
         }
 
         return $middlewares;
+    }
+
+    /**
+     * @param string $class A fully qualified name of a middleware class.
+     *
+     * @return PsrMiddlewareInterface|MiddlewareInterface An instance of the specified middleware class.
+     */
+    protected function initializeMiddleware(string $class): PsrMiddlewareInterface|MiddlewareInterface
+    {
+        if (!class_exists($class, true)) {
+            throw new UnexpectedValueException('Middleware not found. (' . $class . ')');
+        }
+
+        /** @var PsrMiddlewareInterface|MiddlewareInterface */
+        return new $class();
     }
 
     /**
@@ -174,19 +204,19 @@ class Snyppet implements SnyppetInterface
      * Gets the composer file data as an array.
      *
      * @return array{
-     *     name: null|string,
-     *     description: null|string,
-     *     version: null|string,
-     *     autoload: null|array{
-     *         psr-4: null|array<string, string|array<string>>,
+     *     name?: string,
+     *     description?: string,
+     *     version?: string,
+     *     autoload?: array{
+     *         psr-4?: array<string, string|array<string>>,
      *     },
-     *     extra: null|array{
-     *         snyppet: null|array{
-     *              name: null|string,
-     *              description: null|string,
-     *              path: null|string,
-     *              namespace: null|string,
-     *              version: null|string,
+     *     extra?: array{
+     *         snyppet?: array{
+     *              name?: string,
+     *              description?: string,
+     *              path?: string,
+     *              namespace?: string,
+     *              version?: string,
      *         },
      *     },
      * }
@@ -205,6 +235,24 @@ class Snyppet implements SnyppetInterface
             $json = file_get_contents($file);
 
             if ($json !== false) {
+                /** @var array{
+                 *     name?: string,
+                 *     description?: string,
+                 *     version?: string,
+                 *     autoload?: array{
+                 *         psr-4?: array<string, string|array<string>>,
+                 *     },
+                 *     extra?: array{
+                 *         snyppet?: array{
+                 *              name?: string,
+                 *              description?: string,
+                 *              path?: string,
+                 *              namespace?: string,
+                 *              version?: string,
+                 *         },
+                 *     },
+                 * }
+                 */
                 $json = json_decode($json, true);
 
                 $this->composer = $json;
@@ -214,6 +262,9 @@ class Snyppet implements SnyppetInterface
         return $this->composer;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getRequired(): array
     {
         return $this->required;

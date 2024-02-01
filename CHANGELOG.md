@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.2.1 - Unreleased
+
+### Added
+
+- Added initializeMiddleware function to Snyppet class to allow for the overriding of specific middleware initializations.
+- Updated comments for PHPStan validation.
+
 ## 1.2.0 - 2023-10-19
 
 ### Added

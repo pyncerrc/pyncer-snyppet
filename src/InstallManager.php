@@ -8,7 +8,9 @@ use Pyncer\Database\Exception\QueryException;
 use Pyncer\Snyppet\Exception\SnyppetInstalledException;
 use Pyncer\Snyppet\Exception\SnyppetNotFoundException;
 use Pyncer\Snyppet\Exception\SnyppetNotInstalledException;
+use Pyncer\Snyppet\InstallInterface;
 use Pyncer\Snyppet\SnyppetManager;
+use Pyncer\Snyppet\UpgradeInterface;
 
 use function Pyncer\IO\filenames as pyncer_io_filenames;
 use function Pyncer\Utility\class_implements as pyncer_class_implements;
@@ -574,6 +576,7 @@ class InstallManager
         $class = $namespace . '\\Install\\Install';
 
         if (class_exists($class, true)) {
+            /** @var InstallInterface */
             return new $class($this->connection);
         }
 
@@ -585,6 +588,7 @@ class InstallManager
      */
     public function getUpgrades(string $snyppetAlias): array
     {
+        /** @var array<UpgradeInterface> */
         $upgrades = [];
 
         $snyppet = $this->snyppetManager->get($snyppetAlias);
@@ -619,10 +623,13 @@ class InstallManager
                 continue;
             }
 
-            $upgrades[] = new $class($this->connection);
+            /** @var UpgradeInterface */
+            $upgrade = new $class($this->connection);
+
+            $upgrades[] = $upgrade;
         }
 
-        usort($upgrades, function($a, $b) {
+        usort($upgrades, function(UpgradeInterface $a, UpgradeInterface $b) {
             return version_compare($a->getVersion(), $a->getVersion());
         });
 
