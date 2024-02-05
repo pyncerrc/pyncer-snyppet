@@ -630,7 +630,7 @@ class InstallManager
         }
 
         usort($upgrades, function(UpgradeInterface $a, UpgradeInterface $b) {
-            return version_compare($a->getVersion(), $a->getVersion());
+            return version_compare($a->getVersion(), $b->getVersion());
         });
 
         return $upgrades;
