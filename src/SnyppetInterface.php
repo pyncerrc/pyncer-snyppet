@@ -21,6 +21,20 @@ interface SnyppetInterface
     public function getNamespace(): ?string;
 
     /**
+     * Gets the composer extra data for this snyppet.
+     *
+     * @return array{
+     *     name?: string,
+     *     description?: string,
+     *     path?: string,
+     *     namespace?: string,
+     *     version?: string,
+     *     install?: string,
+     * }
+     */
+    public function getExtra(): array;
+
+    /**
      * @return array<string> An array of required snyppet aliases.
      */
     public function getRequired(): array;

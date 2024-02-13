@@ -27,6 +27,7 @@ class Snyppet implements SnyppetInterface
      *              path?: string,
      *              namespace?: string,
      *              version?: string,
+     *              install?: string,
      *         },
      *     },
      * }
@@ -201,6 +202,16 @@ class Snyppet implements SnyppetInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getExtra(): array
+    {
+        $composer = $this->getComposer();
+
+        return $composer['extra']['snyppet'] ?? [];
+    }
+
+    /**
      * Gets the composer file data as an array.
      *
      * @return array{
@@ -217,6 +228,7 @@ class Snyppet implements SnyppetInterface
      *              path?: string,
      *              namespace?: string,
      *              version?: string,
+     *              install?: string,
      *         },
      *     },
      * }
@@ -249,6 +261,7 @@ class Snyppet implements SnyppetInterface
                  *              path?: string,
                  *              namespace?: string,
                  *              version?: string,
+                 *              install?: string,
                  *         },
                  *     },
                  * }

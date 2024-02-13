@@ -573,7 +573,12 @@ class InstallManager
             return null;
         }
 
-        $class = $namespace . '\\Install\\Install';
+        $installNamespace = strval($snyppet->getExtra()['install'] ?? '');
+        if ($installNamespace !== '') {
+            $installNamespace = '\\' . $installNamespace;
+        }
+
+        $class = $namespace . '\\Install' . $installNamespace . '\\Install';
 
         if (class_exists($class, true)) {
             /** @var InstallInterface */
@@ -593,7 +598,16 @@ class InstallManager
 
         $snyppet = $this->snyppetManager->get($snyppetAlias);
 
-        $dir = $snyppet->getDir() . DS . 'Install';
+        $install = strval($snyppet->getExtra()['install'] ?? '');
+
+        $installPath = '';
+        $installNamespace = '';
+        if ($install !== '') {
+            $installPath = DS . $install;
+            $installNamespace = '\\' . $install;
+        }
+
+        $dir = $snyppet->getDir() . DS . 'Install' . $installPath;
 
         if (!file_exists($dir)) {
             return [];
@@ -606,7 +620,7 @@ class InstallManager
             return $upgrades;
         }
 
-        $namespace .= '\\Install\\';
+        $namespace .= '\\Install' . $installNamespace . '\\';
 
         foreach ($filenames as $filename) {
             if ($filename === 'Install') {

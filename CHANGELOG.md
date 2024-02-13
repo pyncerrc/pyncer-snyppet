@@ -1,10 +1,12 @@
 # Change Log
 
-## 1.2.1 - Unreleased
+## 1.3.0 - Unreleased
 
 ### Added
 
 - Added initializeMiddleware function to Snyppet class to allow for the overriding of specific middleware initializations.
+- Added getExtra function to Snyppet and Snyppet interface.
+- Added ability to specify a sub directory for snyppet installs so that multiple snyppets can share a namespace.
 - Updated comments for PHPStan validation.
 
 ### Fixed
