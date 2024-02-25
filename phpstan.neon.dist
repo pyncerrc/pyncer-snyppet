@@ -12,7 +12,7 @@ parameters:
             count: 1
             path: src/InstallManager.php
         -
-            message: "#^Method Pyncer\\\\Snyppet\\\\SnyppetManager::getSnyppets\\(\\) should return array<Pyncer\\\\Snyppet\\\\Snyppet> but returns array<int<0, max>, mixed>\\.$#"
+            message: "#^Method Pyncer\\\\Snyppet\\\\SnyppetManager::getSnyppets\\(\\) should return array<Pyncer\\\\Snyppet\\\\SnyppetInterface> but returns array<int<0, max>, mixed>\\.$#"
             count: 1
             path: src/SnyppetManager.php
         -

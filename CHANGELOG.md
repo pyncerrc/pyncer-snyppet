@@ -1,13 +1,13 @@
 # Change Log
 
-## 1.3.0 - Unreleased
+## 1.3.0 - 2024-02-25
 
 ### Added
 
 - Added initializeMiddleware function to Snyppet class to allow for the overriding of specific middleware initializations.
 - Added getExtra function to Snyppet and Snyppet interface.
 - Added ability to specify a sub directory for snyppet installs so that multiple snyppets can share a namespace.
-- Updated comments for PHPStan validation.
+- Updated phpdoc comments for PHPStan validation.
 
 ### Fixed
 - Fixed issue with version sorting during upgrade process.
@@ -16,7 +16,7 @@
 
 ### Added
 
-- Added required snyppet option to specify snyppet middlewares should run first.
+- Added required snyppet option to specify which snyppet middlewares should run first.
 - Added version parameter to SnyppetManager has function to ensure minimum versions.
 
 ## 1.1.1 - 2023-04-11

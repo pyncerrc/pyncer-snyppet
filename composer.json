@@ -10,7 +10,7 @@
         "pyncer/core": "^1.0.1",
         "pyncer/data": "^1.0.1",
         "pyncer/database": "^1.0",
-        "pyncer/iterable": "^1.1",
+        "pyncer/iterable": "^1.1.2",
         "pyncer/http": "^1.1.3"
     },
     "require-dev": {
