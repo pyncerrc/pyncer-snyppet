@@ -1,6 +1,6 @@
 # Change Log
 
-## 1.3.0 - 2024-02-25
+## 1.2.0 - 2024-02-25
 
 ### Added
 
@@ -8,16 +8,11 @@
 - Added getExtra function to Snyppet and Snyppet interface.
 - Added ability to specify a sub directory for snyppet installs so that multiple snyppets can share a namespace.
 - Updated phpdoc comments for PHPStan validation.
+- Added required snyppet option to specify which snyppet middlewares should run first.
+- Added version parameter to SnyppetManager has function to ensure minimum versions.
 
 ### Fixed
 - Fixed issue with version sorting during upgrade process.
-
-## 1.2.0 - 2023-10-19
-
-### Added
-
-- Added required snyppet option to specify which snyppet middlewares should run first.
-- Added version parameter to SnyppetManager has function to ensure minimum versions.
 
 ## 1.1.1 - 2023-04-11
 
