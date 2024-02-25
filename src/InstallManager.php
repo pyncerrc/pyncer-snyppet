@@ -575,7 +575,7 @@ class InstallManager
 
         $installNamespace = strval($snyppet->getExtra()['install'] ?? '');
         if ($installNamespace !== '') {
-            $installNamespace = '\\' . $installNamespace;
+            $installNamespace = '\\' . str_replace('/', '\\', $installNamespace);
         }
 
         $class = $namespace . '\\Install' . $installNamespace . '\\Install';
@@ -603,8 +603,8 @@ class InstallManager
         $installPath = '';
         $installNamespace = '';
         if ($install !== '') {
-            $installPath = DS . $install;
-            $installNamespace = '\\' . $install;
+            $installPath = DS . str_replace('/', DS, $install);
+            $installNamespace = '\\' . str_replace('/', '\\', $install);
         }
 
         $dir = $snyppet->getDir() . DS . 'Install' . $installPath;
