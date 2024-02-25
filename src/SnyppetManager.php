@@ -1,11 +1,11 @@
 <?php
 namespace Pyncer\Snyppet;
 
-use Pyncer\Snyppet\Snyppet;
+use Pyncer\Snyppet\SnyppetInterface;
 use Pyncer\Snyppet\Exception\SnyppetNotFoundException;
-use Pyncer\Iterable\StaticAccessIterator;
+use Pyncer\Iterable\StaticIterator;
 
-class SnyppetManager extends StaticAccessIterator
+class SnyppetManager extends StaticIterator
 {
     /**
      * @param null|array<string> $snyppets An array of snyppet aliases to
@@ -49,7 +49,7 @@ class SnyppetManager extends StaticAccessIterator
         }
     }
 
-    public static function register(Snyppet $snyppet): void
+    public static function register(SnyppetInterface $snyppet): void
     {
         static::$values[$snyppet->getAlias()] = $snyppet;
 
@@ -83,7 +83,7 @@ class SnyppetManager extends StaticAccessIterator
     }
 
     /**
-     * @return array<Snyppet> An array of snyppets.
+     * @return array<SnyppetInterface> An array of snyppets.
      */
     public function getSnyppets(): array
     {
