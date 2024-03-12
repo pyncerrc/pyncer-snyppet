@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.2.1 - 2024-03-12
+
+### Fixed
+
+- The Snyppet::getNamespace() method's return value no longer starts with a '\' to bring it inline with ::class.
+
 ## 1.2.0 - 2024-02-25
 
 ### Added

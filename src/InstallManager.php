@@ -631,7 +631,7 @@ class InstallManager
 
             if (!pyncer_class_implements(
                 $filename,
-                '\Pyncer\Snyppet\UpgradeInterface',
+                UpgradeInterface::class,
                 true
             )) {
                 continue;

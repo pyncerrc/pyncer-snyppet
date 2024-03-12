@@ -190,7 +190,7 @@ class Snyppet implements SnyppetInterface
 
         $namespace = $composer['extra']['snyppet']['namespace'] ?? null;
         if ($namespace !== null) {
-            return '\\' . trim($namespace, '\\');
+            return trim($namespace, '\\');
         }
 
         $namespace = $composer['autoload']['psr-4'] ?? null;
@@ -198,7 +198,7 @@ class Snyppet implements SnyppetInterface
             return null;
         }
 
-        return '\\' . trim(array_keys($namespace)[0], '\\');
+        return trim(array_keys($namespace)[0], '\\');
     }
 
     /**
