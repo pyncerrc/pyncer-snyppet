@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.2.2 - Unreleased
+
+### Changed
+
+- Added forgeMiddleware method to Snyppet class and deprecated initializeMiddleware.
+
 ## 1.2.1 - 2024-03-12
 
 ### Fixed
@@ -10,8 +16,8 @@
 
 ### Added
 
-- Added initializeMiddleware function to Snyppet class to allow for the overriding of specific middleware initializations.
-- Added getExtra function to Snyppet and Snyppet interface.
+- Added initializeMiddleware method to Snyppet class to allow for the overriding of specific middleware initializations.
+- Added getExtra method to Snyppet class and interface.
 - Added ability to specify a sub directory for snyppet installs so that multiple snyppets can share a namespace.
 - Updated phpdoc comments for PHPStan validation.
 - Added required snyppet option to specify which snyppet middlewares should run first.

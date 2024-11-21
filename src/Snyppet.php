@@ -114,7 +114,7 @@ class Snyppet implements SnyppetInterface
         foreach ($typeMiddlewares as $middleware) {
             $class = $namespace . $middleware . 'Middleware';
 
-            $middlewares[] = $this->initializeMiddleware($class);
+            $middlewares[] = $this->forgeMiddleware($class);
         }
 
         return $middlewares;
@@ -125,7 +125,7 @@ class Snyppet implements SnyppetInterface
      *
      * @return PsrMiddlewareInterface|MiddlewareInterface An instance of the specified middleware class.
      */
-    protected function initializeMiddleware(string $class): PsrMiddlewareInterface|MiddlewareInterface
+    protected function forgeMiddleware(string $class): PsrMiddlewareInterface|MiddlewareInterface
     {
         if (!class_exists($class, true)) {
             throw new UnexpectedValueException('Middleware not found. (' . $class . ')');
@@ -133,6 +133,14 @@ class Snyppet implements SnyppetInterface
 
         /** @var PsrMiddlewareInterface|MiddlewareInterface */
         return new $class();
+    }
+
+    /**
+     * @deprecated Use forgeMiddleware.
+     */
+    protected function initializeMiddleware(string $class): PsrMiddlewareInterface|MiddlewareInterface
+    {
+        return $this->forgeMiddleware($class);
     }
 
     /**
