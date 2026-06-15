@@ -1,16 +1,15 @@
 # Change Log
 
-## 1.2.2 - Unreleased
+## 1.2.1 - 2026-06-15
+
+### Fixed
+
+- Fixed issue with upgrade initialization.
+- The Snyppet::getNamespace() method's return value no longer starts with a '\' to bring it inline with ::class.
 
 ### Changed
 
 - Added forgeMiddleware method to Snyppet class and deprecated initializeMiddleware.
-
-## 1.2.1 - 2024-03-12
-
-### Fixed
-
-- The Snyppet::getNamespace() method's return value no longer starts with a '\' to bring it inline with ::class.
 
 ## 1.2.0 - 2024-02-25
 
