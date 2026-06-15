@@ -630,7 +630,7 @@ class InstallManager
             $class = $namespace . $filename;
 
             if (!pyncer_class_implements(
-                $filename,
+                $class,
                 UpgradeInterface::class,
                 true
             )) {
